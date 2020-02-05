@@ -10,7 +10,8 @@
     "typeorm": "ts-node ./node_modules/typeorm/cli.js",
     "migration:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate -n",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
-    "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert"
+    "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert",
+    "entity:create": "ts-node ./node_modules/typeorm/cli.js entity:create -n"
   },
   "_moduleAliases": {
     "@daos": "dist/daos",
