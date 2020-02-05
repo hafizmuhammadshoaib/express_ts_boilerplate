@@ -6,7 +6,11 @@
     "lint": "tslint --project \"tsconfig.json\"",
     "start": "node -r module-alias/register ./dist",
     "start:dev": "nodemon --config nodemon.json",
-    "test": "nodemon --config nodemon.test.json"
+    "test": "nodemon --config nodemon.test.json",
+    "typeorm": "ts-node ./node_modules/typeorm/cli.js",
+    "migration:generate": "ts-node ./node_modules/typeorm/cli.js migration:generate -n",
+    "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
+    "migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert"
   },
   "_moduleAliases": {
     "@daos": "dist/daos",
@@ -23,6 +27,8 @@
     "http-status-codes": "^1.4.0",
     "module-alias": "^2.2.2",
     "morgan": "^1.9.1",
+    "mysql": "^2.18.1",
+    "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.22",
     "winston": "^3.2.1"
   },
