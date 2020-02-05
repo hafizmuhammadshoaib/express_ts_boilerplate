@@ -20,6 +20,8 @@
     "@server": "dist/Server"
   },
   "dependencies": {
+    "@hapi/joi": "^17.1.0",
+    "@types/hapi__joi": "^16.0.9",
     "boom": "^7.3.0",
     "command-line-args": "^5.1.1",
     "cookie-parser": "^1.4.4",
