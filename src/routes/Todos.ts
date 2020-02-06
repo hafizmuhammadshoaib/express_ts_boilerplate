@@ -18,6 +18,35 @@ const router = Router();
  *                      Get All Todos - "GET /api/todos/all"
  ******************************************************************************/
 
+/**
+* @swagger
+* /api/todos/all:
+*   get:
+*     tags:
+*       - Todo Call
+*     summary: get all todos
+*     description: Returns and array.
+*     produces:
+*       - application/json
+*     responses:
+*       200:
+*         description: OK
+*         content:
+*           application/json:
+*             schema:
+*               $ref: ''
+*             example:
+*               data: [{
+     "id": 2,
+     "title": "Vue",
+     "item": "Learn Vue.js",
+     "createdAt": "2020-02-05T11:30:34.172Z",
+     "updatedAt": "2020-02-05T11:30:34.172Z"
+   }]
+*       500:
+*         $ref: ''
+*/
+
 router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
     try {
         let todos = await getAllTodos();
