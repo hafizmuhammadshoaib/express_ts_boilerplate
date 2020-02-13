@@ -4,7 +4,6 @@ import { logger } from '@shared';
 
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import { User } from "./entity/User";
 
 createConnection().then(async connection => {
 
