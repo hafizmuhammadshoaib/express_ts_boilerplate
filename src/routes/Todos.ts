@@ -1,11 +1,8 @@
 
 
-import { logger } from '@shared';
+import { logger, _Err } from '@shared';
 import { Request, Response, Router, Express, NextFunction } from 'express';
-import { BAD_REQUEST, CREATED, OK, INTERNAL_SERVER_ERROR } from 'http-status-codes';
-import { paramMissingError } from '@shared';
-import { ParamsDictionary } from 'express-serve-static-core';
-import express from 'express';
+import { OK } from 'http-status-codes';
 import { getAllTodos, addTodo, updateTodo, deleteTodo } from 'src/services/Todos';
 import Boom from 'boom';
 import { ITodoInsert, ITodoUpdate, ITodoDelete } from 'src/inputs/TodoInputs';
@@ -66,7 +63,8 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
         res.status(OK).json({ data: todos })
     }
     catch (e) {
-        next(Boom.badRequest('crashed!!!').output)
+        _Err(e);
+        next(Boom.badImplementation('Internal Server Error').output)
     }
 });
 /**
@@ -142,7 +140,8 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
         }
     }
     catch (e) {
-        next(Boom.badImplementation('crashed!!!').output)
+        _Err(e);
+        next(Boom.badImplementation('Internal Server Error').output)
     }
 });
 
@@ -222,7 +221,8 @@ router.put('/', async (req: Request, res: Response, next: NextFunction) => {
         }
     }
     catch (e) {
-        next(Boom.badImplementation('crashed!!!').output)
+        _Err(e);
+        next(Boom.badImplementation('Internal Server Error').output)
     }
 });
 /**
@@ -274,7 +274,8 @@ router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
         }
     }
     catch (e) {
-        next(Boom.badImplementation('crashed!!!').output)
+        _Err(e);
+        next(Boom.badImplementation('Internal Server Error').output)
     }
 })
 

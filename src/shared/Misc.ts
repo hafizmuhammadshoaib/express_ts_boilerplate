@@ -1,13 +1,11 @@
 import { logger } from './Logger';
 
-export const paramMissingError = 'One or more of the required parameters was missing.';
 
-export const pErr = (err: Error) => {
+export const _Err = (err: Error) => {
     if (err) {
         logger.error(err);
     }
 };
-
-export const getRandomInt = () => {
-    return Math.floor(Math.random() * 1_000_000_000_000);
-};
+export const _Info = (method: string, url: string, body: Object) => {
+    logger.info((`method:${method} url:${url} body:${body}`));
+}

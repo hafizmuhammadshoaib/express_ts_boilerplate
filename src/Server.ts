@@ -1,7 +1,6 @@
-import cookieParser from 'cookie-parser';
 import express from 'express';
 import { Request, Response, NextFunction } from 'express';
-import logger from 'morgan';
+import { _Info, _Err } from '@shared';
 import BaseRouter from './routes';
 import Boom from 'boom';
 
@@ -9,15 +8,16 @@ import Boom from 'boom';
 const app = express();
 
 // Add middleware/settings/routes to express.
-app.use(logger('dev'));
+app.use((req: Request, res: Response, next: NextFunction) => {
+    _Info(req.method, req.url, req.body);
+    next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 app.use('/api', BaseRouter);
 
 app.use(function (req: Request, res: Response, next: NextFunction) {
     next(Boom.notFound('not found').output);
-
 });
 
 // error handler
