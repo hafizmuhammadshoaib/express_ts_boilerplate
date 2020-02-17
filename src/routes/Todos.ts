@@ -71,7 +71,7 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
 });
 /**
  * @swagger
- * /api/todos/add:
+ * /api/todos/:
  *   post:
  *     tags:
  *       - Todo
@@ -130,7 +130,7 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
  *       
  */
 
-router.post('/add', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         let payload: ITodoInsert = { ...req.body };
         let { error } = InsertValidator.validate(payload);
@@ -148,7 +148,7 @@ router.post('/add', async (req: Request, res: Response, next: NextFunction) => {
 
 /**
  * @swagger
- * /api/todos/update:
+ * /api/todos/:
  *   put:
  *     tags:
  *       - Todo
@@ -210,7 +210,7 @@ router.post('/add', async (req: Request, res: Response, next: NextFunction) => {
  *       
  */
 
-router.put('/update', async (req: Request, res: Response, next: NextFunction) => {
+router.put('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         let payload: ITodoUpdate = { ...req.body };
         let { error } = UpdateValidator.validate(payload);
@@ -227,7 +227,7 @@ router.put('/update', async (req: Request, res: Response, next: NextFunction) =>
 });
 /**
  * @swagger
- * /api/todos/delete:
+ * /api/todos/:
  *   delete:
  *     tags:
  *       - Todo
@@ -262,7 +262,7 @@ router.put('/update', async (req: Request, res: Response, next: NextFunction) =>
                     }
  *       
  */
-router.delete('/delete', async (req: Request, res: Response, next: NextFunction) => {
+router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         let payload: ITodoDelete = { ...req.body };
         let { error } = UpdateValidator.validate(payload);
