@@ -12,7 +12,8 @@ import { InsertValidator, UpdateValidator } from 'src/validators/TodoValidator';
 const router = Router();
 
 
-/**
+/*
+*
 * @swagger
 * /api/todos/all:
 *   get:
@@ -44,7 +45,7 @@ const router = Router();
 *                       createdAt:
 *                          type: string
 *                       updatedAt:
-*                          type: string  
+*                          type: string
 *             example:
 *               data: [{
      "id": 2,
@@ -59,7 +60,7 @@ const router = Router();
 
 router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        let todos = await getAllTodos();
+        const todos = await getAllTodos();
         res.status(OK).json({ data: todos })
     }
     catch (e) {
@@ -92,9 +93,9 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
  *                  min: 3
  *           example:
  *              {
-            "title":"work task",
-            "item":"abcdefghiklmnop"
-                }  
+ *               "title":"work task",
+ *              "item":"abcdefghiklmnop"
+ *              }
  *     responses:
  *       201:
  *         description: Created
@@ -116,24 +117,24 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
  *                createdAt:
  *                  type: string
  *                updatedAt:
- *                  type: string  
+ *                  type: string
  *             example:
  *               "data": {
-                    "title": "work task",
-                    "item": "abcdefghiklmnop",
-                    "id": 3,
-                    "createdAt": "2020-02-13T17:13:40.997Z",
-                    "updatedAt": "2020-02-13T17:13:40.997Z"
-                    }
- *       
+ *                   "title": "work task",
+ *                   "item": "abcdefghiklmnop",
+ *                   "id": 3,
+ *                   "createdAt": "2020-02-13T17:13:40.997Z",
+ *                   "updatedAt": "2020-02-13T17:13:40.997Z"
+ *                   }
+ *
  */
 
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        let payload: ITodoInsert = { ...req.body };
-        let { error } = InsertValidator.validate(payload);
+        const payload: ITodoInsert = { ...req.body };
+        const { error } = InsertValidator.validate(payload);
         if (!error) {
-            let todos = await addTodo(payload.title, payload.item);
+            const todos = await addTodo(payload.title, payload.item);
             res.status(OK).json({ data: todos })
         } else {
             next(Boom.badRequest(error.message).output);
@@ -173,9 +174,9 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
  *           example:
  *              {
  *          "id":3,
-            "title":"work task",
-            "item":"abcdefghiklmnop"
-                }  
+ *           "title":"work task",
+ *           "item":"abcdefghiklmnop"
+ *               }
  *     responses:
  *       200:
  *         description: Created
@@ -197,24 +198,24 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
  *                createdAt:
  *                  type: string
  *                updatedAt:
- *                  type: string 
+ *                  type: string
  *             example:
  *               "data": {
-                    "title": "work task",
-                    "item": "abcdefghiklmnop",
-                    "id": 3,
-                    "createdAt": "2020-02-13T17:13:40.997Z",
-                    "updatedAt": "2020-02-13T17:13:40.997Z"
-                    }
- *       
+ *                   "title": "work task",
+ *                   "item": "abcdefghiklmnop",
+ *                   "id": 3,
+ *                   "createdAt": "2020-02-13T17:13:40.997Z",
+ *                   "updatedAt": "2020-02-13T17:13:40.997Z"
+ *                   }
+ *
  */
 
 router.put('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        let payload: ITodoUpdate = { ...req.body };
-        let { error } = UpdateValidator.validate(payload);
+        const payload: ITodoUpdate = { ...req.body };
+        const { error } = UpdateValidator.validate(payload);
         if (!error) {
-            let todos = await updateTodo(payload);
+            const todos = await updateTodo(payload);
             res.status(OK).json({ data: payload })
         } else {
             next(Boom.badRequest(error.message).output);
@@ -244,8 +245,8 @@ router.put('/', async (req: Request, res: Response, next: NextFunction) => {
  *                  type: number
  *           example:
  *              {
- *          "id":3
-                }  
+ *              "id":3
+ *              }
  *     responses:
  *       200:
  *         description: Created
@@ -258,16 +259,16 @@ router.put('/', async (req: Request, res: Response, next: NextFunction) => {
  *                  type: string
  *             example:
  *               "data": {
-                    "title": "deleted successfully"
-                    }
- *       
+ *                   "title": "deleted successfully"
+ *                   }
+ *
  */
 router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        let payload: ITodoDelete = { ...req.body };
-        let { error } = UpdateValidator.validate(payload);
+        const payload: ITodoDelete = { ...req.body };
+        const { error } = UpdateValidator.validate(payload);
         if (!error) {
-            let todos = await deleteTodo(payload.id);
+            const todos = await deleteTodo(payload.id);
             res.status(OK).json({ data: { 'message': 'deleted successfully' } })
         } else {
             next(Boom.badRequest(error.message).output);

@@ -4,8 +4,8 @@ import { ITodoUpdate } from 'src/inputs/TodoInputs';
 export function addTodo(title: string, item: string) {
     const todoitemRepo = getConnection().getRepository(Todo);
     return todoitemRepo.save(todoitemRepo.create({
-        item: item,
-        title: title
+        item,
+        title
     }))
 
 }

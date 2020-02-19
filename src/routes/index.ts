@@ -1,6 +1,4 @@
 import { Router } from 'express';
-// import UserRouter from './Users';
-import swaggerUI from "swagger-ui-express";
 import TodoRouter from './Todos';
 import Docs from './docs';
 

@@ -16,12 +16,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', BaseRouter);
 
-app.use(function (req: Request, res: Response, next: NextFunction) {
+app.use((req: Request, res: Response, next: NextFunction) => {
     next(Boom.notFound('not found').output);
 });
 
 // error handler
-app.use(function (err: Boom.Output, req: Request, res: Response, next: NextFunction) {
+app.use((err: Boom.Output, req: Request, res: Response, next: NextFunction) => {
     res.status(err.statusCode || 500)
     res.json(err.payload)
 });

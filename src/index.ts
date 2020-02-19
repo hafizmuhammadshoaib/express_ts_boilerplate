@@ -2,8 +2,8 @@ import app from '@server';
 import './LoadEnv';
 import { logger, _Err } from '@shared';
 
-import "reflect-metadata";
-import { createConnection } from "typeorm";
+import 'reflect-metadata';
+import { createConnection } from 'typeorm';
 
 createConnection().then(async connection => {
 
