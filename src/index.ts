@@ -1,5 +1,5 @@
-import './LoadEnv'; // Must be the first import
 import app from '@server';
+import './LoadEnv';
 import { logger, _Err } from '@shared';
 
 import "reflect-metadata";

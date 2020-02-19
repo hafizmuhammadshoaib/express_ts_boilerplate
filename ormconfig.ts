@@ -1,3 +1,4 @@
+import './src/LoadEnv';
 export = {
    type: "mysql",
    host: process.env.DB_HOST,
