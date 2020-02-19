@@ -3,7 +3,7 @@
 import { logger, _Err } from '@shared';
 import { Request, Response, Router, Express, NextFunction } from 'express';
 import { OK } from 'http-status-codes';
-import { getAllTodos, addTodo, updateTodo, deleteTodo } from 'src/services/Todos';
+import { getAllTodos, addTodo, updateTodo, deleteTodo, getCount } from 'src/services/Todos';
 import Boom from 'boom';
 import { ITodoInsert, ITodoUpdate, ITodoDelete } from 'src/inputs/TodoInputs';
 import { InsertValidator, UpdateValidator } from 'src/validators/TodoValidator';
@@ -12,8 +12,7 @@ import { InsertValidator, UpdateValidator } from 'src/validators/TodoValidator';
 const router = Router();
 
 
-/*
-*
+/**
 * @swagger
 * /api/todos/all:
 *   get:
@@ -21,6 +20,15 @@ const router = Router();
 *       - Todo
 *     summary: get all todos
 *     description: Returns an array.
+*     parameters:
+*       - page:
+*         in: query
+*         name: page
+*         description: The number of page to return
+*         schema:
+*             type: integer
+*             minimum: 1
+*             default: '1'  
 *     produces:
 *       - application/json
 *     responses:
@@ -29,39 +37,73 @@ const router = Router();
 *         content:
 *           application/json:
 *             schema:
-*               type: array
-*               items:
-*                    properties:
-*                       id:
-*                         type: number
-*                       item:
-*                          type: string
-*                          min: 10
-*                          max: 255
-*                       title:
-*                          type: string
-*                          max: 25
-*                          min: 3
-*                       createdAt:
-*                          type: string
-*                       updatedAt:
-*                          type: string
-*             example:
-*               data: [{
-     "id": 2,
-     "title": "Vue",
-     "item": "Learn Vue.js",
-     "createdAt": "2020-02-05T11:30:34.172Z",
-     "updatedAt": "2020-02-05T11:30:34.172Z"
-   }]
+*               type: object
+*               properties:
+*                   currentPage:
+*                       type: number
+*                   hasMorePages:
+*                       type: boolean
+*                   totalPages:
+*                       type: number
+*                   todos:
+*                       type: object
+*                       properties:
+*                           id:
+*                               type: number
+*                           item:
+*                               type: string
+*                               min: 10
+*                               max: 255
+*                           title:
+*                               type: string
+*                               max: 25
+*                               min: 3
+*                           createdAt:
+*                               type: string
+*                           updatedAt:
+*                               type: string
+*               example:
+*                "data": {
+*        "todos": [
+*            {
+*                "id": 1,
+*                "title": "work task",
+*                "item": "abcdefghiklmnop",
+*                "createdAt": "2020-02-19T10:31:53.113Z",
+*                "updatedAt": "2020-02-19T10:31:53.113Z"
+*            },
+*            {
+*                "id": 2,
+*                "title": "hello",
+*                "item": "this is something to be happen",
+*                "createdAt": "2020-02-19T10:58:20.483Z",
+*                "updatedAt": "2020-02-19T10:58:20.483Z"
+*            }
+*        ],
+*        "currentPage": 1,
+*        "hasMorePages": true,
+*        "totalPages": 2
+*    }
 *       500:
 *         $ref: ''
 */
 
 router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const todos = await getAllTodos();
-        res.status(OK).json({ data: todos })
+        const perPage = 10;
+        const { page } = req.query
+        const currentPage: number = Number(page) || 1;
+        const todos = await getAllTodos(page, perPage);
+        const count = await getCount();
+        const totalPages: number = Math.ceil(count / perPage);
+        res.status(OK).json({
+            data: {
+                todos,
+                currentPage,
+                hasMorePages: currentPage !== totalPages,
+                totalPages
+            }
+        })
     }
     catch (e) {
         _Err(e);

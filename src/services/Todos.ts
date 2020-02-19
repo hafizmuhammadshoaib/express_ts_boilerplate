@@ -10,9 +10,9 @@ export function addTodo(title: string, item: string) {
 
 }
 
-export function getAllTodos() {
+export function getAllTodos(page: number, perPage: number) {
     const todoitemRepo = getConnection().getRepository(Todo);
-    return todoitemRepo.find({});
+    return todoitemRepo.find({ skip: ((perPage * page) - perPage), take: perPage });
 }
 
 export function updateTodo(payload: ITodoUpdate) {
@@ -25,4 +25,8 @@ export function deleteTodo(id: number) {
     const todoitemRepo = getConnection().getRepository(Todo);
     return todoitemRepo.delete(id);
 
+}
+export function getCount() {
+    const todoitemRepo = getConnection().getRepository(Todo);
+    return todoitemRepo.count();
 }
