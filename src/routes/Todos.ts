@@ -176,7 +176,7 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
         const payload: ITodoInsert = { ...req.body };
         const { error } = InsertValidator.validate(payload);
         if (!error) {
-            const todos = await addTodo(payload.title, payload.item);
+            const todos = await addTodo(payload);
             res.status(OK).json({ data: todos })
         } else {
             next(Boom.badRequest(error.message).output);
@@ -310,7 +310,7 @@ router.delete('/', async (req: Request, res: Response, next: NextFunction) => {
         const payload: ITodoDelete = { ...req.body };
         const { error } = UpdateValidator.validate(payload);
         if (!error) {
-            const todos = await deleteTodo(payload.id);
+            const todos = await deleteTodo(payload);
             res.status(OK).json({ data: { 'message': 'deleted successfully' } })
         } else {
             next(Boom.badRequest(error.message).output);

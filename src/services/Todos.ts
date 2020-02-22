@@ -1,12 +1,10 @@
 import { getConnection } from 'typeorm';
 import { Todo } from '../entity'
-import { ITodoUpdate } from 'src/inputs/TodoInputs';
-export function addTodo(title: string, item: string) {
+import { ITodoUpdate, ITodoInsert, ITodoDelete } from 'src/inputs/TodoInputs';
+
+export function addTodo(payload: ITodoInsert) {
     const todoitemRepo = getConnection().getRepository(Todo);
-    return todoitemRepo.save(todoitemRepo.create({
-        item,
-        title
-    }))
+    return todoitemRepo.save(todoitemRepo.create(payload));
 
 }
 
@@ -21,9 +19,9 @@ export function updateTodo(payload: ITodoUpdate) {
     return todoitemRepo.update(payload.id, { ...payload });
 }
 
-export function deleteTodo(id: number) {
+export function deleteTodo(payload: ITodoDelete) {
     const todoitemRepo = getConnection().getRepository(Todo);
-    return todoitemRepo.delete(id);
+    return todoitemRepo.delete(payload.id);
 
 }
 export function getCount() {

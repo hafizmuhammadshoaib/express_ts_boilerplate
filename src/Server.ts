@@ -8,12 +8,12 @@ import Boom from 'boom';
 const app = express();
 
 // Add middleware/settings/routes to express.
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use((req: Request, res: Response, next: NextFunction) => {
     _Info(req.method, req.url, req.body);
     next();
 });
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use('/api', BaseRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
