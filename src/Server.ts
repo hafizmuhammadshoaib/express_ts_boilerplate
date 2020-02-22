@@ -7,7 +7,6 @@ import Boom from 'boom';
 // Init express
 const app = express();
 
-// Add middleware/settings/routes to express.
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use((req: Request, res: Response, next: NextFunction) => {
@@ -16,6 +15,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 app.use('/api', BaseRouter);
 
+//404 handler
 app.use((req: Request, res: Response, next: NextFunction) => {
     next(Boom.notFound('not found').output);
 });
