@@ -1,4 +1,4 @@
-# Express TS boilerplate build with TypeORM
+# Express TS boilerplate build with TypeORM https://img.shields.io/github/issues/hafizmuhammadshoaib/express_ts_boilerplate https://img.shields.io/github/forks/hafizmuhammadshoaib/express_ts_boilerplate https://img.shields.io/github/stars/hafizmuhammadshoaib/express_ts_boilerplate https://img.shields.io/github/license/hafizmuhammadshoaib/express_ts_boilerplate
 
 Steps to run this project:
 
