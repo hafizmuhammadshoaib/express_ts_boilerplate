@@ -93,7 +93,7 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
         const perPage = 10;
         const { page } = req.query
         const currentPage: number = Number(page) || 1;
-        const todos = await getAllTodos(page, perPage);
+        const todos = await getAllTodos(currentPage, perPage);
         const count = await getCount();
         const totalPages: number = Math.ceil(count / perPage);
         res.status(OK).json({

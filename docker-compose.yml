@@ -1,0 +1,26 @@
+version: '3.0'
+
+services:
+
+    mysql:
+        container_name: mysql_todo
+        image: mysql:5.7
+        env_file: 
+            - ./env/mysql.env
+        ports:
+            - 3306:3306
+    api:
+        build: .
+        ports:
+            - 8080:8080
+        command: yarn start:dev
+        container_name: api_todo
+        env_file:
+            - ./env/development.env
+        volumes:
+            - ./src:/app/src
+        depends_on: 
+            - mysql
+
+    
+          
