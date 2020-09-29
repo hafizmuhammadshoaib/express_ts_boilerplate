@@ -26,7 +26,6 @@ export function addUser(payload: ISignup): Promise<User> {
 export function getUser(payload: ISignin): Promise<User> {
     return new Promise((resolve, reject) => {
         const userRepo = getConnection().getRepository(User);
-        console.log(payload.email)
         userRepo.findOne({ where: { email: payload.email } }).then(user => {
             bcrypt.compare(payload.password, user.password, (err, matched) => {
                 if (!err && matched) {

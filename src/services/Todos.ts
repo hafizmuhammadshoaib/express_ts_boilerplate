@@ -1,16 +1,16 @@
 import { getConnection } from 'typeorm';
-import { Todo } from '../entity'
-import { ITodoUpdate, ITodoInsert, ITodoDelete } from 'src/inputs/TodoInputs';
+import { Todo, User } from '../entity'
+import { ITodoUpdate, ITodoInsert, ITodoDelete, ITodoSave } from 'src/inputs/TodoInputs';
 
-export function addTodo(payload: ITodoInsert) {
+export function addTodo(payload: ITodoSave) {
     const todoitemRepo = getConnection().getRepository(Todo);
     return todoitemRepo.save(todoitemRepo.create(payload));
 
 }
 
-export function getAllTodos(page: number, perPage: number) {
+export function getAllTodos(page: number, perPage: number, user: User) {
     const todoitemRepo = getConnection().getRepository(Todo);
-    return todoitemRepo.find({ skip: ((perPage * page) - perPage), take: perPage });
+    return todoitemRepo.find({ skip: ((perPage * page) - perPage), take: perPage, where: { user: user } });
 }
 
 export function updateTodo(payload: ITodoUpdate) {
