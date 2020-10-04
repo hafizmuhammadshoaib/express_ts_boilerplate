@@ -1,6 +1,8 @@
+import { User } from 'src/entity';
+
 export interface ITodoInsert {
     item: string,
-    title: string
+    title: string,
 }
 export interface ITodoUpdate {
     id: number,
@@ -9,4 +11,9 @@ export interface ITodoUpdate {
 }
 export interface ITodoDelete {
     id: number
+}
+export interface ITodoSave {
+    item: string,
+    title: string,
+    user: User
 }

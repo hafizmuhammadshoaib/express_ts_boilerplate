@@ -5,7 +5,7 @@ import { Request, Response, Router, Express, NextFunction } from 'express';
 import { OK } from 'http-status-codes';
 import { getAllTodos, addTodo, updateTodo, deleteTodo, getCount } from 'src/services/Todos';
 import Boom from 'boom';
-import { ITodoInsert, ITodoUpdate, ITodoDelete } from 'src/inputs/TodoInputs';
+import { ITodoInsert, ITodoUpdate, ITodoDelete, ITodoSave } from 'src/inputs/TodoInputs';
 import { InsertValidator, UpdateValidator } from 'src/validators/TodoValidator';
 
 
@@ -93,7 +93,8 @@ router.get('/all', async (req: Request, res: Response, next: NextFunction) => {
         const perPage = 10;
         let { page } = req.query;
         const currentPage: number = Number(page) || 1;
-        const todos = await getAllTodos(Number(page), perPage);
+        let user = req['token']
+        const todos = await getAllTodos(Number(page), perPage, user);
         const count = await getCount();
         const totalPages: number = Math.ceil(count / perPage);
         res.status(OK).json({
@@ -176,7 +177,12 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
         const payload: ITodoInsert = { ...req.body };
         const { error } = InsertValidator.validate(payload);
         if (!error) {
-            const todos = await addTodo(payload);
+            let user = req['token']
+            let _payload: ITodoSave = {
+                ...payload,
+                user
+            }
+            const todos = await addTodo(_payload);
             res.status(OK).json({ data: todos })
         } else {
             next(Boom.badRequest(error.message).output);
