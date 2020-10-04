@@ -5,7 +5,7 @@ import { ISignup } from 'src/inputs/AuthInputs';
 import { SigninValidator, SignupValidator } from 'src/validators/AuthValidator';
 import { addUser, getUser } from 'src/services/Auth';
 import { OK } from 'http-status-codes';
-import { generateJWT } from 'src/services/Jwt';
+import { generateJWT, verifyJWT } from 'src/services/Jwt';
 import { User } from 'src/entity';
 
 
@@ -43,7 +43,7 @@ const router = Router();
  *              "password":"12345678"
  *              }
  *     responses:
- *       201:
+ *       200:
  *         description: Created
  *         content:
  *           application/json:
@@ -67,7 +67,8 @@ const router = Router();
  *                   "name": "abcd",
  *                   "email": "abc@member.com",
  *                   "id": 3,
- *                   "token":"...."
+ *                   "token":"....",
+ *                   "refreshToken":"....",
  *                   }
  *
  */
@@ -79,8 +80,10 @@ router.post('/signup', async (req: Request, res: Response, next: NextFunction) =
         if (!error) {
             const user: User = await addUser(payload);
             delete user.password;
-            let token = await generateJWT({ ...user });
+            let token = await generateJWT({ ...user }, process.env.ACCESS_TOKEN_TIME);
+            let refreshToken = await generateJWT({ ...user }, process.env.REFRESH_TOKEN_TIME)
             user['token'] = token;
+            user['refreshToken'] = refreshToken;
             res.status(OK).json({ data: user })
         } else {
             next(Boom.badRequest(error.message).output);
@@ -128,7 +131,7 @@ router.post('/signup', async (req: Request, res: Response, next: NextFunction) =
  *              "password":"12345678"
  *              }
  *     responses:
- *       201:
+ *       200:
  *         description: Created
  *         content:
  *           application/json:
@@ -151,7 +154,8 @@ router.post('/signup', async (req: Request, res: Response, next: NextFunction) =
  *               "data": {
  *                   "email": "abc@member.com",
  *                   "id": 3,
- *                   "token":"...."
+ *                   "token":"....",
+ *                   "refreshToken":"....",
  *                   }
  *
  */
@@ -163,8 +167,10 @@ router.post('/signin', async (req: Request, res: Response, next: NextFunction) =
         if (!error) {
             const user: User = await getUser(payload);
             delete user.password;
-            let token = await generateJWT({ ...user });
+            let token = await generateJWT({ ...user }, process.env.ACCESS_TOKEN_TIME);
+            let refreshToken = await generateJWT({ ...user }, process.env.REFRESH_TOKEN_TIME)
             user['token'] = token;
+            user['refreshToken'] = refreshToken;
             res.status(OK).json({ data: user })
         } else {
             next(Boom.badRequest(error.message).output);
@@ -175,4 +181,63 @@ router.post('/signin', async (req: Request, res: Response, next: NextFunction) =
         next(Boom.badRequest(e.message).output)
     }
 });
+
+
+/**
+ * @swagger
+ * /api/auth/refreshtoken:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Refresh token
+ *     description: Refresh token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *                refreshToken:
+ *                  type: string
+ *           example:
+ *              {
+ *              "refreshToken":"..."
+ *              }
+ *     responses:
+ *       200:
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                  refreshToken:
+ *                  type: string
+ *             example:
+ *                  {
+ *                  "refreshToken":"..."
+ *                  }
+ *
+ */
+router.post('/refreshtoken', async (req: Request, res: Response, next: NextFunction) => {
+    let refreshToken = req?.body?.refreshToken;
+    if (refreshToken) {
+        try {
+            let decodedToken = await verifyJWT(refreshToken);
+            let user = {
+                id: decodedToken.id,
+                name: decodedToken.name,
+                email: decodedToken.email
+            }
+            let token = await generateJWT(user, process.env.ACCESS_TOKEN_TIME)
+            refreshToken = await generateJWT(user, process.env.REFRESH_TOKEN_TIME)
+            res.json({ token, refreshToken })
+        } catch (e) {
+            next(Boom.unauthorized().output);
+        }
+    } else {
+        next(Boom.forbidden().output);
+    }
+})
 export default router;

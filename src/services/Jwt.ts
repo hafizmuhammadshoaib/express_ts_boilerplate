@@ -1,10 +1,11 @@
 
+import { func } from '@hapi/joi';
 import jwt from 'jsonwebtoken';
 import { DecodedToken } from 'src/inputs/DecodedToken';
 const secretKey = 'secretKey'
-export function generateJWT(payload: any): Promise<string> {
+export function generateJWT(payload: any, expiresIn: string | number): Promise<string> {
     return new Promise((resolve, reject) => {
-        jwt.sign(payload, secretKey, { expiresIn: "15m" }, (err, token) => {
+        jwt.sign(payload, secretKey, { expiresIn }, (err, token) => {
             if (!err) {
                 resolve(token)
             }

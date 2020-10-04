@@ -9,7 +9,6 @@ const router = Router();
 
 // Add sub-routes
 router.use('/auth', AuthRouter);
-
 router.use('/todos', authMiddleware, TodoRouter);
 
 router.use('/docs', Docs);
